@@ -46,6 +46,7 @@ export class ProblemeComponent implements OnInit {
     const courrielGroupControl = this.problemeForm.get('courrielGroup');
     const telephoneControl = this.problemeForm.get('telephone');
     const pattern = "[a-z0-9._%+-]+@[a-z0-9.-]+";
+    const pattern1 = "[0-9]+";
 
     courrielControl.clearValidators();
     courrielControl.reset();
@@ -79,21 +80,15 @@ export class ProblemeComponent implements OnInit {
 
       courrielGroupControl.setValidators([Validators.compose([emailMatcherValidator.courrielDifferents()])]);
 
-      telephoneControl.disable();
-
-    } else if (typeNotification === 'téléphone') {
-
-      courrielControl.disable();
-      confirmerCourrielControl.disable();
+    } else if (typeNotification === 'telephone') {
 
       telephoneControl.enable();
-      telephoneControl.setValidators([Validators.required]);
+      telephoneControl.setValidators([Validators.minLength(10), Validators.maxLength(10), Validators.pattern(pattern1), Validators.required]);
     }
 
     courrielControl.updateValueAndValidity();
     confirmerCourrielControl.updateValueAndValidity();
     courrielGroupControl.updateValueAndValidity();
     telephoneControl.updateValueAndValidity();
-
   }
 }
