@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { emailMatcherValidator } from '../shared/email-matcher/email-matcher.component';
 import { ZonesValidator } from '../shared/longueur-minimum/longueur-minimum.component';
 import { IProbleme } from './typeprobleme';
 import { TypeproblemeService } from './typeprobleme.service';
@@ -23,25 +24,28 @@ export class ProblemeComponent implements OnInit {
       nom: ['', [Validators.maxLength(50), Validators.required]],
       Typeprobleme: ['', [Validators.required]],
       noTypeProbleme: ['', Validators.required],
+      typeNotification: ['NePasNotifier'],
       courrielGroup: this.fb.group({
         courriel: [{ value: '', disabled: true }],
-        courrielConfirmation: [{ value: '', disabled: true }],
+        courrielConfirmation: [{ value: '', disabled: true }]
       }),
-      telephone: [{ value: '', disabled: true }],
+      telephone: [{ value: '', disabled: true }]
     });
 
 
     this.typeprobleme.obtenirProblemes()
       .subscribe(cat => this.typesProblemes = cat,
-        error => this.errorMessage = <any>error);
+        error => this.errorMessage = <any>error)
   };
 
 
-  appliquerNotifications(): void {
+  appliquerNotifications(typeNotification: string): void {
 
     const courrielControl = this.problemeForm.get('courrielGroup.courriel');
     const confirmerCourrielControl = this.problemeForm.get('courrielGroup.courrielConfirmation');
+    const courrielGroupControl = this.problemeForm.get('courrielGroup');
     const telephoneControl = this.problemeForm.get('telephone');
+    const pattern = "[a-z0-9._%+-]+@[a-z0-9.-]+";
 
     courrielControl.clearValidators();
     courrielControl.reset();
@@ -58,5 +62,38 @@ export class ProblemeComponent implements OnInit {
     courrielControl.updateValueAndValidity();
     confirmerCourrielControl.updateValueAndValidity();
     telephoneControl.updateValueAndValidity();
+
+    if (typeNotification === 'NePasNotifier') {
+
+      courrielControl.disable();
+      confirmerCourrielControl.disable();
+      telephoneControl.disable();
+
+    } else if (typeNotification === 'courriel') {
+
+      courrielControl.enable();
+      courrielControl.setValidators([Validators.pattern(pattern), Validators.required]);
+
+      confirmerCourrielControl.enable();
+      confirmerCourrielControl.setValidators([Validators.required]);
+
+      courrielGroupControl.setValidators([Validators.compose([emailMatcherValidator.courrielDifferents()])]);
+
+      telephoneControl.disable();
+
+    } else if (typeNotification === 'téléphone') {
+
+      courrielControl.disable();
+      confirmerCourrielControl.disable();
+
+      telephoneControl.enable();
+      telephoneControl.setValidators([Validators.required]);
+    }
+
+    courrielControl.updateValueAndValidity();
+    confirmerCourrielControl.updateValueAndValidity();
+    courrielGroupControl.updateValueAndValidity();
+    telephoneControl.updateValueAndValidity();
+
   }
 }
