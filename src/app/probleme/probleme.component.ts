@@ -14,6 +14,7 @@ export class ProblemeComponent implements OnInit {
   problemeForm: FormGroup;
   typesProblemes: IProbleme[];
   errorMessage: string;
+  save(): void { };
 
   constructor(private fb: FormBuilder, private typeprobleme: TypeproblemeService) { }
 
@@ -24,7 +25,7 @@ export class ProblemeComponent implements OnInit {
       nom: ['', [Validators.maxLength(50), Validators.required]],
       Typeprobleme: ['', [Validators.required]],
       noTypeProbleme: ['', Validators.required],
-      typeNotification: ['NePasNotifier'],
+      typeNotification: [{ value: 'NePasNotifier', disabled: false }],
       courrielGroup: this.fb.group({
         courriel: [{ value: '', disabled: true }],
         courrielConfirmation: [{ value: '', disabled: true }]
@@ -36,6 +37,9 @@ export class ProblemeComponent implements OnInit {
     this.typeprobleme.obtenirProblemes()
       .subscribe(cat => this.typesProblemes = cat,
         error => this.errorMessage = <any>error)
+
+    this.problemeForm.get('typeNotification').valueChanges
+      .subscribe(value => this.appliquerNotifications(value));
   };
 
 
