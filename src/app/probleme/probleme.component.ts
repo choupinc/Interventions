@@ -24,13 +24,16 @@ export class ProblemeComponent implements OnInit {
       prenom: ['', [ZonesValidator.longueurMinimum(3), Validators.required]],
       nom: ['', [Validators.maxLength(50), Validators.required]],
       Typeprobleme: ['', [Validators.required]],
-      noTypeProbleme: ['', Validators.required],
       typeNotification: [{ value: 'NePasNotifier', disabled: false }],
       courrielGroup: this.fb.group({
         courriel: [{ value: '', disabled: true }],
         courrielConfirmation: [{ value: '', disabled: true }]
       }),
-      telephone: [{ value: '', disabled: true }]
+      telephone: [{ value: '', disabled: true }],
+      descriptionProbleme: ['', [Validators.required, Validators.minLength(5)]],
+      noUnite: '',
+      dateProbleme: { value: Date(), disabled: true }
+
     });
 
 
