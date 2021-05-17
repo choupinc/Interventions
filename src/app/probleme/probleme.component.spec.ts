@@ -2,7 +2,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ProblemeComponent } from './probleme.component';
-import { TypeproblemeService } from './typeprobleme.service';
+import { TypeProblemeService } from './typeprobleme.service';
 
 describe('ProblemeComponent', () => {
   let component: ProblemeComponent;
@@ -12,7 +12,7 @@ describe('ProblemeComponent', () => {
     await TestBed.configureTestingModule({
       imports: [ReactiveFormsModule, HttpClientModule],
       declarations: [ProblemeComponent],
-      providers: [TypeproblemeService]
+      providers: [TypeProblemeService]
     })
       .compileComponents();
   });
